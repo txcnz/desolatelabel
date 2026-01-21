@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>дезолейт · кабинет</title>
+  <style>
+    /* ===== SF PRO (локально) ===== */
+    @font-face { font-family: 'SF Pro Display'; src: url('fonts/SF-Pro-Display-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'SF Pro Display'; src: url('fonts/SF-Pro-Display-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'SF Pro Display'; src: url('fonts/SF-Pro-Display-Semibold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'SF Pro Text'; src: url('fonts/SF-Pro-Text-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'SF Pro Text'; src: url('fonts/SF-Pro-Text-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+
+    :root {
+      --bg: #0b0b0b;
+      --panel: rgba(15,15,15,0.88);
+      --line: rgba(255,255,255,0.10);
+      --muted: rgba(255,255,255,0.60);
+      --muted2: rgba(255,255,255,0.38);
+      --text: #fff;
+      --good: rgba(120, 255, 150, 0.9);
+      --bad: rgba(255, 120, 120, 0.9);
+    }
+
+    body.light {
+      --bg: #f5f5f5;
+      --panel: rgba(255,255,255,0.90);
+      --line: rgba(0,0,0,0.12);
+      --muted: rgba(0,0,0,0.55);
+      --muted2: rgba(0,0,0,0.38);
+      --text: #000;
+      --good: rgba(40, 160, 90, 0.9);
+      --bad: rgba(200, 70, 70, 0.9);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      overflow-x: hidden;
+      transition: background 0.5s ease, color 0.5s ease; height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      background: linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0));
+    }
+
+    .brand {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      font-size: 16px;
+      margin-bottom: 22px;
+    }
+
+    .who {
+      padding: 12px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 18px;
+    }
+
+    .who .role { font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; opacity: 0.55; margin-bottom: 6px; }
+    .who .name { font-size: 14px; opacity: 0.9; }
+
+    .nav { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+
+    .nav a {
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      opacity: 0.75;
+      transition: opacity 0.2s, background 0.2s, border 0.2s;
+    }
+
+    .nav a:hover { opacity: 1; background: rgba(255,255,255,0.04); }
+
+    .nav a.active {
+      opacity: 1;
+      background: rgba(255,255,255,0.06);
+      border-color: var(--line);
+    }
+
+    .nav .hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.5;
+    }
+
+    .logout {
+      margin-top: 18px;
+      opacity: 0.6;
+      cursor: pointer;
+      padding: 12px 12px;
+      border-radius: 12px;
+      transition: opacity 0.2s, background 0.2s;
+      user-select: none;
+    }
+
+    .logout:hover { opacity: 1; background: rgba(255,255,255,0.04); }
+
+    .main {
+      padding: 34px 34px 80px;
+    }
+
+    .top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      font-size: 28px;
+    }
+
+    .sub {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 680px;
+    }
+
+    .badge {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      max-width: 980px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      padding: 18px;
+    }
+
+    .card-title {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 8px;
+    }
+
+    input[type="text"], input[type="date"], textarea, select {
+      width: 100%;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--line);
+      color: #fff;
+      padding: 12px 12px;
+      border-radius: 12px;
+      outline: none;
+      font-size: 14px;
+      transition: border 0.2s, background 0.2s;
+    }
+
+    textarea { min-height: 110px; resize: vertical; }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(255,255,255,0.28);
+      background: rgba(0,0,0,0.35);
+    }
+
+    .muted {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .help {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.45;
+    }
+
+    .inline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .inline input { accent-color: #fff; }
+
+    .btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    /* ===== CHOICE SLIDERS (как на гостевой, но компактно) ===== */
+    .cslider {
+      width: 100%;
+      user-select: none;
+    }
+
+    .cslider-track {
+      position: relative;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.25);
+      overflow: hidden;
+      transition: background 0.45s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    body.light .cslider-track { background: rgba(255,255,255,0.55); }
+
+    .cslider-thumb {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      height: 36px;
+      width: calc((100% - 8px) / var(--steps));
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(10px);
+      transform: translateX(0%);
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), background 0.45s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    body.light .cslider-thumb {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .cslider-labels {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(var(--steps), 1fr);
+      align-items: center;
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .cslider-labels span {
+      opacity: 0.75;
+      transition: opacity 0.35s ease;
+    }
+
+    .cslider[data-active-index="0"] .cslider-labels span[data-i="0"],
+    .cslider[data-active-index="1"] .cslider-labels span[data-i="1"],
+    .cslider[data-active-index="2"] .cslider-labels span[data-i="2"] {
+      opacity: 1;
+      color: var(--text);
+    }
+
+    .cslider input { display: none; }
+
+    .btn {
+      border: 1px solid rgba(255,255,255,0.35);
+      background: transparent;
+      color: #fff;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: opacity 0.2s, background 0.2s, border 0.2s;
+    }
+
+    .btn:hover { opacity: 1; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.6); }
+
+    .btn.secondary { opacity: 0.7; border-color: rgba(255,255,255,0.18); }
+    .btn.secondary:hover { opacity: 1; border-color: rgba(255,255,255,0.4); }
+
+    .btn.danger { border-color: rgba(255,120,120,0.55); }
+
+    .statusline {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .pill.good { border-color: rgba(120,255,150,0.35); color: rgba(120,255,150,0.85); }
+    .pill.bad  { border-color: rgba(255,120,120,0.35); color: rgba(255,120,120,0.85); }
+    .pill.warn { border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.65); }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(0,0,0,0.18);
+    }
+
+    .item .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .cover {
+      width: 48px;
+      height: 48px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      object-fit: cover;
+      flex: 0 0 auto;
+    }
+
+    .meta {
+      min-width: 0;
+    }
+
+    .meta .t {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 520px;
+    }
+
+    .meta .a {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 520px;
+    }
+
+    .item .right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+
+    .smallbtn {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      cursor: pointer;
+      opacity: 0.75;
+      transition: opacity 0.2s, background 0.2s, border 0.2s;
+    }
+
+    .smallbtn:hover { opacity: 1; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.25); }
+
+    .login-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 36px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.03);
+      padding: 22px;
+    }
+
+    .login-title {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .login-sub { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
+
+    .note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.45;
+    }
+
+    /* ===== MODAL PREVIEW ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.78);
+      z-index: 200;
+      padding: 24px;
+    }
+
+    .modal.active { display: flex; }
+
+    .modal-card {
+      width: 100%;
+      max-width: 880px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(15,15,15,0.92);
+      backdrop-filter: blur(10px);
+      padding: 18px;
+    }
+
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .modal-top .tt {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .x {
+      cursor: pointer;
+      opacity: 0.6;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .x:hover { opacity: 1; background: rgba(255,255,255,0.05); border-color: var(--line); }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .preview-cover {
+      width: 260px;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .kv {
+      display: grid;
+      gap: 8px;
+      padding: 6px 0;
+    }
+
+    .kv .k { font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted2); }
+    .kv .v { font-size: 14px; color: rgba(255,255,255,0.88); }
+
+    .tracks {
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .track {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      background: rgba(0,0,0,0.22);
+    }
+
+    .track .n { font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; font-weight: 500; }
+    .track .m { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* чуть приятнее на узких экранах */
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+      .main { padding: 22px 18px 80px; }
+      .preview-grid { grid-template-columns: 1fr; }
+      .preview-cover { width: 100%; height: auto; aspect-ratio: 1/1; }
+      .meta .t, .meta .a { max-width: 52vw; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== LOGIN VIEW ===== -->
+  <div id="loginView" class="login-page" style="display:none">
+    <div class="login-card">
+      <div class="login-title">дезолейт · вход</div>
+      <div class="login-sub">доступ только по приглашению. если у тебя есть логин и пароль, заходи.</div>
+
+      <div style="margin-top: 14px">
+        <label>логин</label>
+        <input id="loginInput" type="text" placeholder="например: artist01" autocomplete="username" />
+      </div>
+
+      <div style="margin-top: 12px">
+        <label>пароль</label>
+        <input id="passInput" type="text" placeholder="••••••••" autocomplete="current-password" />
+        <div class="note">это прототип без сервера: логин/пароль хранятся локально, чисто для демонстрации интерфейса.</div>
+      </div>
+
+      <div class="btns" style="margin-top: 14px">
+        <button class="btn" id="doLogin">войти</button>
+        <button class="btn secondary" id="seedDemo">заполнить демо</button>
+      </div>
+
+      <div class="statusline" id="loginStatus" style="margin-top: 10px"></div>
+    </div>
+  </div>
+
+  <!-- ===== APP VIEW ===== -->
+  <div id="appView" class="app" style="display:none">
+    <aside class="sidebar">
+      <div class="brand">дезолейт</div>
+
+      <div class="who">
+        <div class="role">artist</div>
+        <div class="name" id="whoName">—</div>
+      </div>
+
+      <nav class="nav">
+        <a href="#dashboard" data-route="dashboard">мои релизы</a>
+        <a href="#new" data-route="new">создать релиз</a>
+        <a href="#drafts" data-route="drafts">черновики</a>
+        <a href="#messages" data-route="messages">сообщения</a>
+        <a href="#stats" data-route="stats">статистика</a>
+
+       
+
+        <div class="logout" id="logout">выйти</div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="top">
+        <div>
+          <h1 id="pageTitle">—</h1>
+          <div class="sub" id="pageSub">—</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="badge" id="badge">cabinet</div>
+          <div id="themeToggle" title="сменить тему" style="cursor:pointer;opacity:.7;user-select:none">◐</div>
+        </div>
+      </div>
+
+      <div id="page"></div>
+    </main>
+  </div>
+
+  <!-- ===== PREVIEW MODAL ===== -->
+  <div class="modal" id="previewModal">
+    <div class="modal-card">
+      <div class="modal-top">
+        <div class="tt">предпросмотр релиза</div>
+        <div class="x" id="closePreview">закрыть</div>
+      </div>
+      <div class="muted">это ровно то, что увидит админ при проверке.</div>
+
+      <div class="preview-grid">
+        <img class="preview-cover" id="pvCover" alt="cover" />
+
+        <div>
+          <div class="kv"><div class="k">название</div><div class="v" id="pvTitle">—</div></div>
+          <div class="kv"><div class="k">тип</div><div class="v" id="pvType">—</div></div>
+          <div class="kv"><div class="k">исполнитель (основной)</div><div class="v" id="pvMain">—</div></div>
+          <div class="kv"><div class="k">фиты</div><div class="v" id="pvFeats">—</div></div>
+          <div class="kv"><div class="k">жанры</div><div class="v" id="pvGenres">—</div></div>
+          <div class="kv"><div class="k">дата релиза</div><div class="v" id="pvDate">—</div></div>
+          <div class="kv"><div class="k">ненормативная лексика</div><div class="v" id="pvExplicit">—</div></div>
+          <div class="kv"><div class="k">ФИ исполнителя</div><div class="v" id="pvReal">—</div></div>
+          <div class="kv"><div class="k">доп. информация</div><div class="v" id="pvInfo">—</div></div>
+        </div>
+      </div>
+
+      <div class="tracks" id="pvTracks"></div>
+
+      <div class="btns">
+        <button class="btn secondary" id="pvSaveDraft">сохранить черновик</button>
+        <button class="btn" id="pvSubmit">отправить на проверку</button>
+      </div>
+
+      <div class="statusline" id="pvStatus"></div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // это прототип ЛК без сервера.
+    // - авторизация: локальная (localStorage)
+    // - релизы/черновики: localStorage
+    // - файлы не загружаются на сервер, но валидируются на клиенте
+    // ============================================================
+
+    const LS = {
+      session: 'desolate.session',
+      users: 'desolate.users',
+      releases: 'desolate.releases',
+      drafts: 'desolate.drafts',
+      messages: 'desolate.messages'
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function nowISO() {
+      return new Date().toISOString();
+    }
+
+    function uid() {
+      return 'r_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
+    }
+
+    function loadJSON(key, fallback) {
+      try {
+        const v = localStorage.getItem(key);
+        if (!v) return fallback;
+        return JSON.parse(v);
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveJSON(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function seedIfEmpty() {
+      const users = loadJSON(LS.users, null);
+      if (!users) {
+        saveJSON(LS.users, [
+          { login: 'artist01', pass: '1234', name: 'tenshi emo' },
+          { login: 'artist02', pass: '1234', name: 'Джовиал' },
+        ]);
+      }
+
+      const msgs = loadJSON(LS.messages, null);
+      if (!msgs) {
+        saveJSON(LS.messages, [
+          { id: uid(), to: 'artist01', from: 'admin', text: 'привет. если грузишь альбом, проверь порядок треков.', at: nowISO() },
+          { id: uid(), to: 'artist01', from: 'admin', text: 'обложки только jpg 3000x3000, без рамок.', at: nowISO() },
+        ]);
+      }
+
+      const rels = loadJSON(LS.releases, null);
+      if (!rels) saveJSON(LS.releases, []);
+
+      const drafts = loadJSON(LS.drafts, null);
+      if (!drafts) saveJSON(LS.drafts, []);
+    }
+
+    seedIfEmpty();
+
+    // ===== session =====
+    function getSession() {
+      return loadJSON(LS.session, null);
+    }
+
+    function setSession(s) {
+      saveJSON(LS.session, s);
+    }
+
+    function clearSession() {
+      localStorage.removeItem(LS.session);
+    }
+
+    function getUser(login) {
+      const users = loadJSON(LS.users, []);
+      return users.find(u => u.login === login) || null;
+    }
+
+    // ===== views =====
+    const loginView = $('loginView');
+    const appView = $('appView');
+
+    function showLogin() {
+      loginView.style.display = 'grid';
+      appView.style.display = 'none';
+    }
+
+    function showApp() {
+      loginView.style.display = 'none';
+      appView.style.display = 'grid';
+    }
+
+    // ===== auth =====
+    $('seedDemo').onclick = () => {
+      $('loginInput').value = 'artist01';
+      $('passInput').value = '1234';
+    };
+
+    $('doLogin').onclick = () => {
+      const login = $('loginInput').value.trim();
+      const pass = $('passInput').value.trim();
+
+      const u = getUser(login);
+      if (!u || u.pass !== pass) {
+        $('loginStatus').innerHTML = `<span class="pill bad">неверный логин или пароль</span>`;
+        return;
+      }
+
+      setSession({ login, at: nowISO() });
+      routeTo(location.hash || '#dashboard');
+      boot();
+    };
+
+    $('logout').onclick = () => {
+      clearSession();
+      showLogin();
+    };
+
+    // ===== routing =====
+    const page = $('page');
+
+    function setActiveNav(route) {
+      document.querySelectorAll('.nav a').forEach(a => {
+        a.classList.toggle('active', a.dataset.route === route);
+      });
+    }
+
+    function setTop(title, sub, badge) {
+      $('pageTitle').textContent = title;
+      $('pageSub').textContent = sub;
+      $('badge').textContent = badge;
+    }
+
+    window.addEventListener('hashchange', () => routeTo(location.hash));
+
+    let __pendingPrefill = null;
+
+    function routeTo(hash) {
+      const route = (hash || '#dashboard').replace('#','');
+
+      if (route === 'new') {
+        renderNew(__pendingPrefill);
+        __pendingPrefill = null;
+      }
+      else if (route === 'drafts') renderDrafts();
+      else if (route === 'messages') renderMessages();
+      else if (route === 'stats') renderStats();
+      else renderDashboard();
+
+      setActiveNav(route === '' ? 'dashboard' : route);
+    }
+
+    // ===== data helpers =====
+    function myLogin() {
+      const s = getSession();
+      return s?.login;
+    }
+
+    function myName() {
+      const u = getUser(myLogin());
+      return u?.name || myLogin();
+    }
+
+    function myReleases() {
+      const all = loadJSON(LS.releases, []);
+      return all.filter(r => r.owner === myLogin()).sort((a,b) => (b.updatedAt||b.createdAt).localeCompare(a.updatedAt||a.createdAt));
+    }
+
+    function myDrafts() {
+      const all = loadJSON(LS.drafts, []);
+      return all.filter(r => r.owner === myLogin()).sort((a,b) => (b.updatedAt||b.createdAt).localeCompare(a.updatedAt||a.createdAt));
+    }
+
+    function saveRelease(obj) {
+      const all = loadJSON(LS.releases, []);
+      const i = all.findIndex(x => x.id === obj.id);
+      if (i >= 0) all[i] = obj; else all.push(obj);
+      saveJSON(LS.releases, all);
+    }
+
+    function saveDraft(obj) {
+      const all = loadJSON(LS.drafts, []);
+      const i = all.findIndex(x => x.id === obj.id);
+      if (i >= 0) all[i] = obj; else all.push(obj);
+      saveJSON(LS.drafts, all);
+    }
+
+    function deleteDraft(id) {
+      const all = loadJSON(LS.drafts, []);
+      saveJSON(LS.drafts, all.filter(x => x.id !== id));
+    }
+
+    // ===== UI: dashboard list =====
+    function statusPill(status) {
+      if (status === 'draft') return `<span class="pill warn">черновик</span>`;
+      if (status === 'review') return `<span class="pill warn">на проверке</span>`;
+      if (status === 'approved') return `<span class="pill good">одобрено</span>`;
+      if (status === 'rejected') return `<span class="pill bad">отклонено</span>`;
+      return `<span class="pill">${status}</span>`;
+    }
+
+    function renderDashboard() {
+      setTop('мои релизы', 'всё, что ты отправил на проверку или уже одобрено.', 'releases');
+      const rels = myReleases();
+
+      page.innerHTML = `
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">список</div>
+            <div class="muted">кнопка редактировать появится, когда подключим сервер и админскую логику. пока можно смотреть статусы.</div>
+
+            <div style="height: 12px"></div>
+            <div class="list" id="relList"></div>
+
+            <div class="btns">
+              <button class="btn" onclick="location.hash='#new'">создать релиз</button>
+              <button class="btn secondary" onclick="location.hash='#drafts'">черновики</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const list = document.getElementById('relList');
+      if (rels.length === 0) {
+        list.innerHTML = `<div class="muted">пока пусто. создай релиз и отправь на проверку.</div>`;
+        return;
+      }
+
+      list.innerHTML = rels.map(r => `
+        <div class="item">
+          <div class="left">
+            <img class="cover" src="${r.coverDataUrl || ''}" alt="" onerror="this.style.display='none'" />
+            <div class="meta">
+              <div class="t">${escapeHTML(r.title)} <span style="opacity:.55">· ${escapeHTML(r.type)}</span></div>
+              <div class="a">${escapeHTML(r.mainArtist)}${r.featArtists?.trim() ? ` · feat: ${escapeHTML(r.featArtists)}` : ''}</div>
+            </div>
+          </div>
+          <div class="right">
+            ${statusPill(r.status)}
+            <button class="smallbtn" onclick="openReadOnly('${r.id}')">просмотр</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== UI: drafts =====
+    function renderDrafts() {
+      setTop('черновики', 'тут скоро всё будет, но пока ничего нету.', 'drafts');
+      page.innerHTML = `
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">заглушка</div>
+            <div class="muted">тут скоро всё будет, но пока ничего нету.</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ===== UI: messages =====
+    function renderMessages() {
+      setTop('сообщения', 'сообщения от админа по релизам и общим вопросам.', 'inbox');
+      const msgs = loadJSON(LS.messages, []).filter(m => m.to === myLogin()).sort((a,b) => b.at.localeCompare(a.at));
+
+      page.innerHTML = `
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">входящие</div>
+            <div class="list" id="msgList"></div>
+          </div>
+        </div>
+      `;
+
+      const list = document.getElementById('msgList');
+      if (msgs.length === 0) {
+        list.innerHTML = `<div class="muted">пока тишина.</div>`;
+        return;
+      }
+
+      list.innerHTML = msgs.map(m => `
+        <div class="item">
+          <div class="left">
+            <div class="meta">
+              <div class="t">${escapeHTML(m.text)}</div>
+              <div class="a">от: ${escapeHTML(m.from)} · ${formatDT(m.at)}</div>
+            </div>
+          </div>
+          <div class="right"><span class="pill warn">info</span></div>
+        </div>
+      `).join('');
+    }
+
+    // ===== UI: stats =====
+    function renderStats() {
+      setTop('статистика', 'тут скоро всё будет, но пока ничего нету.', 'stats');
+      page.innerHTML = `
+        <div class="grid">
+          <div class="card">
+            <div class="card-title">заглушка</div>
+            <div class="muted">тут скоро всё будет, но пока ничего нету.</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ===== UI: new release =====
+    const formState = {
+      id: null,
+      coverFile: null,
+      coverDataUrl: null,
+      realNames: [''],
+      tracks: [] // для single: 1 элемент, для album: много
+    };
+
+    function renderNew(prefill) {
+      setTop('новый релиз','',':3');
+
+      // reset state unless editing
+      if (!prefill) {
+        formState.id = null;
+        formState.coverFile = null;
+        formState.coverDataUrl = null;
+        formState.realNames = [''];
+        formState.tracks = [];
+      }
+
+      page.innerHTML = `
+        <div class="grid">
+
+          <div class="card">
+
+            <div class="row" style="grid-template-columns: 260px 1fr; align-items: start; gap: 14px;">
+              <div>
+                <label>обложка</label>
+                <div style="margin-top: 10px">
+                  <img id="coverPreview" style="width:260px;height:260px;object-fit:cover;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,0.06)" />
+                </div>
+                <div style="margin-top: 10px">
+                  <input id="fCover" type="file" accept="image/jpeg" />
+                  <div class="help" id="coverHelp">jpg + строго 3000x3000</div>
+                </div>
+              </div>
+
+              <div>
+                <div>
+                  <label>вид релиза (переключение влияет на раздел "треки")</label>
+                  <div class="cslider" id="typeSlider" style="--steps:2" data-active-index="0">
+                    <div class="cslider-track">
+                      <div class="cslider-thumb" id="typeThumb"></div>
+                      <div class="cslider-labels">
+                        <span data-i="0">single</span>
+                        <span data-i="1">album</span>
+                      </div>
+                    </div>
+                    <input id="fTypeHidden" type="text" value="single" />
+                  </div>
+                </div>
+
+                <div style="margin-top:12px">
+                  <label>название релиза</label>
+                  <input id="fTitle" type="text" placeholder="например: СамыйЛучшийТрек" />
+                </div>
+
+                <div style="margin-top:12px">
+                  <label>ник исполнителя</label>
+                  <input id="fMain" type="text" placeholder="например: Биг Тейсти Тейп" />
+                </div>
+
+                <div style="margin-top:10px">
+                  <label>доп. исполнители</label>
+                  <input id="fFeats" type="text" placeholder="если есть" />
+                  <div class="inline" style="margin-top:6px">
+<div>feat.</div>
+                    <input id="fFeatDot" type="checkbox" />
+                    
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px">
+                  <div>
+                    <label>дата релиза</label>
+                    <input id="fDate" type="date" />
+                  </div>
+                  <div>
+                    <label>жанр</label>
+                    <div class="cslider" id="genreSlider" style="--steps:3" data-active-index="0">
+                      <div class="cslider-track">
+                        <div class="cslider-thumb" id="genreThumb"></div>
+                        <div class="cslider-labels">
+                          <span data-i="0">alternative</span>
+                          <span data-i="1">hip-hop</span>
+                          <span data-i="2">electro</span>
+                        </div>
+                      </div>
+                      <input id="fGenre" type="text" value="альтернатива" />
+                    </div>
+                  </div>
+                </div>
+
+                <div style="margin-top:12px">
+                  <label>ненормативная лексика</label>
+                  <div class="cslider" id="explicitSlider" style="--steps:2" data-active-index="0">
+                    <div class="cslider-track">
+                      <div class="cslider-thumb" id="explicitThumb"></div>
+                      <div class="cslider-labels">
+                        <span data-i="0">нет</span>
+                        <span data-i="1">да</span>
+                      </div>
+                    </div>
+                    <input id="fExplicit" type="text" value="no" />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="statusline" id="mainStatus"></div>
+          </div>
+
+          <div class="card" id="tracksCard">
+            <div class="card-title">треки</div>
+            <div class="muted" id="tracksHint">—</div>
+            <div id="tracksBody" style="margin-top:12px"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">дополнительно</div>
+
+            <div>
+              <label>ФИ исполнителя</label>
+              <div id="realNamesBox" style="display:grid; gap:10px"></div>
+              <div class="btns" style="margin-top:10px">
+                <button class="btn secondary" type="button" id="addReal">+ добавить ФИ</button>
+              </div>
+              <div class="help">если есть несколько участников с разными ФИ, добавь ещё строку.</div>
+            </div>
+
+            <div style="margin-top:12px">
+              <label>доп. информация</label>
+              <textarea id="fInfo" placeholder="опционально: что важно знать админам"></textarea>
+            </div>
+
+            <div class="statusline" id="actionStatus"></div>
+
+            <div class="btns" style="margin-top:12px">
+              <button class="btn secondary" id="openPreview" type="button">предпросмотр</button>
+              <button class="btn danger" id="resetForm" type="button">сбросить</button>
+            </div>
+          </div>
+
+        </div>
+      `;
+
+      wireFormNew(prefill);
+    }
+
+    function renderRealNames() {
+      const box = document.getElementById('realNamesBox');
+      if (!box) return;
+      box.innerHTML = '';
+      formState.realNames.forEach((v, i) => {
+        const wrap = document.createElement('div');
+        wrap.style.display = 'grid';
+        wrap.style.gridTemplateColumns = '1fr auto';
+        wrap.style.gap = '10px';
+        wrap.innerHTML = `
+          <input type="text" data-real-index="${i}" value="${escapeHTML(v)}" placeholder="например: Иванов Иван" />
+          <button class="btn secondary" type="button" data-real-del="${i}" style="padding:10px 12px">×</button>
+        `;
+        box.appendChild(wrap);
+      });
+
+      box.querySelectorAll('input[data-real-index]').forEach(inp => {
+        inp.addEventListener('input', (e) => {
+          const idx = Number(e.target.getAttribute('data-real-index'));
+          formState.realNames[idx] = e.target.value;
+        });
+      });
+
+      box.querySelectorAll('button[data-real-del]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = Number(e.target.getAttribute('data-real-del'));
+          if (formState.realNames.length === 1) {
+            formState.realNames[0] = '';
+          } else {
+            formState.realNames.splice(idx, 1);
+          }
+          renderRealNames();
+        });
+      });
+    }
+
+    function initChoiceSlider(rootId, values, getValue, setValue, onChange) {
+      const root = document.getElementById(rootId);
+      if (!root) return;
+
+      const track = root.querySelector('.cslider-track');
+      const thumb = root.querySelector('.cslider-thumb');
+      if (!track) return;
+
+      const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+      function valueToIndex(v) {
+        const i = values.indexOf(v);
+        return i >= 0 ? i : 0;
+      }
+
+      function indexToValue(i) {
+        return values[clamp(i, 0, values.length - 1)];
+      }
+
+      function renderByIndex(i) {
+        const steps = values.length;
+        root.setAttribute('data-active-index', String(i));
+        const pct = 100 * i;
+	if (thumb) thumb.style.transform = `translateX(${pct}%)`;
+        setValue(indexToValue(i));
+        if (onChange) onChange(indexToValue(i), i);
+      }
+
+      function hitIndex(clientX) {
+        const rect = track.getBoundingClientRect();
+        const x = clamp(clientX - rect.left, 0, rect.width);
+        const ratio = x / rect.width;
+        const i = clamp(Math.round(ratio * (values.length - 1)), 0, values.length - 1);
+        return i;
+      }
+
+      let dragging = false;
+
+      const onDown = (e) => {
+        dragging = true;
+        renderByIndex(hitIndex(e.clientX));
+        track.setPointerCapture?.(e.pointerId);
+      };
+
+      const onMove = (e) => {
+        if (!dragging) return;
+        renderByIndex(hitIndex(e.clientX));
+      };
+
+      const onUp = () => { dragging = false; };
+
+      track.addEventListener('pointerdown', onDown);
+      track.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+
+      // initial
+      renderByIndex(valueToIndex(getValue()));
+    }
+
+    function setGenre(val) {
+      const g = document.getElementById('fGenre');
+      if (g) g.value = val;
+    }
+
+    function setExplicit(val) {
+      const e = document.getElementById('fExplicit');
+      if (e) e.value = val;
+    }
+
+    function setType(val) {
+      const hidden = document.getElementById('fTypeHidden');
+      if (hidden) hidden.value = val;
+      renderTracksSection(val);
+    }
+
+    function setExplicitSlider(val) { setExplicit(val); }
+
+    function setGenreSlider(val) { setGenre(val); }
+
+    function setTypeSlider(val) { setType(val); }
+
+    function renderTracksSection(type) {
+      const hint = document.getElementById('tracksHint');
+      const body = document.getElementById('tracksBody');
+      if (!hint || !body) return;
+
+      if (type === 'single') {
+        hint.textContent = '';
+        // гарантируем 1 трек в стейте
+        if (formState.tracks.length === 0) {
+          formState.tracks = [{ id: uid(), title: '', file: null, fileName: '', mainArtist: '', featArtists: '', featDot: false, genre: '', explicit: 'no' }];
+        } else {
+          formState.tracks = [formState.tracks[0]];
+        }
+
+        const t = formState.tracks[0];
+        body.innerHTML = `
+          <div class="row">
+            <div>
+              <label>файл трека (wav/flac)</label>
+              <input id="sFile" type="file" accept="audio/flac,audio/wav,.flac,.wav" />
+            </div>
+            <div>
+              <label>ник исполнителя</label>
+              <input id="sMain" type="text" placeholder="например: КиЗаРу" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>доп. исполнители</label>
+            <input id="sFeats" type="text" placeholder="если есть" />
+            <div class="inline" style="margin-top:6px">
+              <div>feat.</div><input id="sFeatDot" type="checkbox" />
+              
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>название релиза</label>
+            <input id="sRelTitleMirror" type="text" disabled />
+            <div class="help">ты выбрал сингл, название подставится автоматически</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>жанр</label>
+            <div class="cslider" id="sGenreSlider" style="--steps:3" data-active-index="0">
+              <div class="cslider-track">
+                <div class="cslider-thumb"></div>
+                <div class="cslider-labels">
+                  <span data-i="0">альтернатива</span>
+                  <span data-i="1">хип-хоп</span>
+                  <span data-i="2">электроника</span>
+                </div>
+              </div>
+              <input id="sGenre" type="text" value="альтернатива" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>ненормативная лексика</label>
+            <div class="cslider" id="sExplicitSlider" style="--steps:2" data-active-index="0">
+              <div class="cslider-track">
+                <div class="cslider-thumb"></div>
+                <div class="cslider-labels">
+                  <span data-i="0">нет</span>
+                  <span data-i="1">да</span>
+                </div>
+              </div>
+              <input id="sExplicit" type="text" value="no" />
+            </div>
+          </div>
+        `;
+
+        // wire single track
+        const titleTop = document.getElementById('fTitle');
+        const mirror = document.getElementById('sRelTitleMirror');
+        if (mirror) mirror.value = titleTop?.value || '';
+        titleTop?.addEventListener('input', () => { if (mirror) mirror.value = titleTop.value; });
+
+        const sFile = document.getElementById('sFile');
+        sFile?.addEventListener('change', (e) => {
+          const f = e.target.files?.[0];
+          if (!f) return;
+          const name = f.name.toLowerCase();
+          const ok = name.endsWith('.wav') || name.endsWith('.flac');
+          if (!ok) {
+            setStatus('sFileHelp', 'нужен wav или flac.', 'bad');
+            e.target.value = '';
+            return;
+          }
+          t.file = f;
+          t.fileName = f.name;
+          setStatus('sFileHelp', 'файл выбран.', 'good');
+        });
+
+        const sMain = document.getElementById('sMain');
+        const sFeats = document.getElementById('sFeats');
+        const sFeatDot = document.getElementById('sFeatDot');
+        if (sMain) { sMain.value = t.mainArtist || ''; sMain.oninput = () => t.mainArtist = sMain.value; }
+        if (sFeats) { sFeats.value = t.featArtists || ''; sFeats.oninput = () => t.featArtists = sFeats.value; }
+        if (sFeatDot) { sFeatDot.checked = !!t.featDot; sFeatDot.onchange = () => t.featDot = sFeatDot.checked; }
+
+        const setSGenre = (val) => {
+          const g = document.getElementById('sGenre');
+          if (g) g.value = val;
+          t.genre = val;
+        };
+
+        initChoiceSlider('sGenreSlider', ['альтернатива','хип-хоп','электроника'],
+          () => (t.genre || document.getElementById('fGenre')?.value || 'альтернатива'),
+          (v) => setSGenre(v),
+          () => {}
+        );
+
+        const setSExp = (val) => {
+          const e = document.getElementById('sExplicit');
+          if (e) e.value = val;
+          t.explicit = val;
+        };
+
+        initChoiceSlider('sExplicitSlider', ['no','yes'],
+          () => (t.explicit || 'no'),
+          (v) => setSExp(v),
+          () => {}
+        );
+
+      } else {
+        hint.textContent = '';
+
+        body.innerHTML = `
+          <div class="row">
+            <div>
+              <label>ник исполнителя</label>
+              <input id="aMain" type="text" placeholder="например: МоргенШтерн" />
+            </div>
+            <div>
+              <label>доп. исполнители</label>
+              <input id="aFeats" type="text" placeholder="если есть" />
+              <div class="inline" style="margin-top:6px">
+                <div>feat.</div><input id="aFeatDot" type="checkbox" />
+                
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            
+
+          <div style="margin-top:12px" class="row">
+            <div>
+              <label>название трека</label>
+              <input id="aTTitle" type="text" placeholder="например: СамыйЛучшийТрек" />
+            </div>
+            <div>
+              <label>файл (wav/flac)</label>
+              <input id="aTFile" type="file" accept="audio/flac,audio/wav,.flac,.wav" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>жанр</label>
+            <div class="cslider" id="aGenreSlider" style="--steps:3" data-active-index="0">
+              <div class="cslider-track">
+                <div class="cslider-thumb"></div>
+                <div class="cslider-labels">
+                  <span data-i="0">альтернатива</span>
+                  <span data-i="1">хип-хоп</span>
+                  <span data-i="2">электроника</span>
+                </div>
+              </div>
+              <input id="aGenre" type="text" value="альтернатива" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>ненормативная лексика</label>
+            <div class="cslider" id="aExplicitSlider" style="--steps:2" data-active-index="0">
+              <div class="cslider-track">
+                <div class="cslider-thumb"></div>
+                <div class="cslider-labels">
+                  <span data-i="0">нет</span>
+                  <span data-i="1">да</span>
+                </div>
+              </div>
+              <input id="aExplicit" type="text" value="no" />
+            </div>
+          </div>
+
+<label>треклист</label>
+            <div class="list" id="albumTrackList"></div>
+          </div>
+          <div class="btns" style="margin-top:12px">
+            <button class="btn" type="button" id="aAddTrack">добавить трек</button>
+          </div>
+
+          <div class="statusline" id="albumStatus"></div>
+        `;
+
+        const aMain = document.getElementById('aMain');
+        const aFeats = document.getElementById('aFeats');
+        const aFeatDot = document.getElementById('aFeatDot');
+        if (aMain) { aMain.value = ''; aMain.oninput = () => {} }
+        if (aFeats) { aFeats.value = ''; aFeats.oninput = () => {} }
+        if (aFeatDot) { aFeatDot.checked = false; aFeatDot.onchange = () => {} }
+
+        // album track list render
+        const list = document.getElementById('albumTrackList');
+        const redraw = () => {
+          if (!list) return;
+          if (formState.tracks.length === 0) {
+            list.innerHTML = `<div class="muted">пока нет треков.</div>`;
+            return;
+          }
+          list.innerHTML = formState.tracks.map((t, idx) => `
+            <div class="item">
+              <div class="left">
+                <div class="meta">
+                  <div class="t">${idx + 1}. ${escapeHTML(t.title)}</div>
+                  <div class="a">${escapeHTML(t.fileName || '')} · ${escapeHTML(t.genre || '')} ${t.explicit === 'yes' ? ' · explicit' : ''}</div>
+                </div>
+              </div>
+              <div class="right">
+                <button class="smallbtn" onclick="removeAlbumTrack('${t.id}')">убрать</button>
+              </div>
+            </div>
+          `).join('');
+        };
+
+        window.removeAlbumTrack = (id) => {
+          formState.tracks = formState.tracks.filter(t => t.id !== id);
+          redraw();
+        };
+
+        initChoiceSlider(
+  'aGenreSlider',
+  ['альтернатива','хип-хоп','электроника'],
+  () => (
+    document.getElementById('aGenre')?.value ||
+    document.getElementById('fGenre')?.value ||
+    'альтернатива'
+  ),
+  (v) => {
+    const g = document.getElementById('aGenre');
+    if (g) g.value = v;
+    window.__albumGenre = v;
+  },
+  () => {}
+);
+        initChoiceSlider('aExplicitSlider', ['no','yes'],
+          () => (document.getElementById('aExplicit')?.value || 'no'),
+          (v) => { const e = document.getElementById('aExplicit'); if (e) e.value = v; window.__albumExplicit = v; },
+          () => {}
+        );
+
+        document.getElementById('aAddTrack')?.addEventListener('click', () => {
+          const tt = document.getElementById('aTTitle');
+          const tf = document.getElementById('aTFile');
+          const title = tt?.value.trim() || '';
+          const file = tf?.files?.[0];
+          if (!title) return setStatus('albumStatus', 'введи название трека.', 'bad');
+          if (!file) return setStatus('albumStatus', 'выбери файл wav/flac.', 'bad');
+          const name = file.name.toLowerCase();
+          if (!(name.endsWith('.wav') || name.endsWith('.flac'))) return setStatus('albumStatus', 'нужен wav или flac.', 'bad');
+
+          formState.tracks.push({
+            id: uid(),
+            title,
+            file,
+            fileName: file.name,
+            genre: window.__albumGenre || '',
+            explicit: window.__albumExplicit || 'no'
+          });
+
+          if (tt) tt.value = '';
+          if (tf) tf.value = '';
+          setStatus('albumStatus', 'трек добавлен.', 'good');
+          redraw();
+        });
+
+        document.getElementById('aClear')?.addEventListener('click', () => {
+          formState.tracks = [];
+          redraw();
+          setStatus('albumStatus', 'очищено.', 'warn');
+        });
+
+        redraw();
+      }
+    }
+
+    async function wireFormNew(prefill) {
+
+      // prefill
+      if (prefill) {
+        document.getElementById('fTitle').value = prefill.title || '';
+        document.getElementById('fMain').value = prefill.mainArtist || '';
+        document.getElementById('fFeats').value = prefill.featArtists || '';
+        document.getElementById('fFeatDot').checked = !!prefill.featDot;
+        document.getElementById('fDate').value = prefill.releaseDate || '';
+        document.getElementById('fInfo').value = prefill.additionalInfo || '';
+        formState.id = prefill.id;
+        formState.coverDataUrl = prefill.coverDataUrl || null;
+        formState.realNames = Array.isArray(prefill.realNames) && prefill.realNames.length ? prefill.realNames : [''];
+
+        const pv = document.getElementById('coverPreview');
+        if (pv) pv.src = formState.coverDataUrl || '';
+
+        setGenre(prefill.genres || '');
+        setExplicit(prefill.explicit ? 'yes' : 'no');
+
+        // tracks
+        formState.tracks = Array.isArray(prefill.tracks) ? prefill.tracks.map(t => ({
+          id: t.id || uid(),
+          title: t.title || '',
+          file: null,
+          fileName: t.fileName || '',
+          mainArtist: t.mainArtist || '',
+          featArtists: t.featArtists || '',
+          featDot: !!t.featDot,
+          genre: t.genre || '',
+          explicit: t.explicit === true ? 'yes' : (t.explicit === 'yes' ? 'yes' : 'no')
+        })) : [];
+
+        setType(prefill.type || 'single');
+      } else {
+        const pv = document.getElementById('coverPreview');
+        if (pv) pv.src = '';
+        setGenre('альтернатива');
+        setExplicit('no');
+        setType('single');
+      }
+
+      renderRealNames();
+
+      document.getElementById('addReal')?.addEventListener('click', () => {
+        formState.realNames.push('');
+        renderRealNames();
+      });
+
+      // cover
+      document.getElementById('fCover')?.addEventListener('change', async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const okType = file.type === 'image/jpeg' || file.name.toLowerCase().endsWith('.jpg') || file.name.toLowerCase().endsWith('.jpeg');
+        if (!okType) {
+          setStatus('coverHelp', 'нужен jpg.', 'bad');
+          e.target.value = '';
+          return;
+        }
+
+        try {
+          const { w, h, dataUrl } = await readImage(file);
+          if (w !== 3000 || h !== 3000) {
+            setStatus('coverHelp', `не подходит размер: ${w}x${h}. нужен 3000x3000.`, 'bad');
+            e.target.value = '';
+            return;
+          }
+          formState.coverFile = file;
+          formState.coverDataUrl = dataUrl;
+          const pv = document.getElementById('coverPreview');
+          if (pv) pv.src = dataUrl;
+          //setStatus('coverHelp', '', 'good');
+        } catch {
+          setStatus('coverHelp', 'не удалось прочитать картинку.', 'bad');
+          e.target.value = '';
+        }
+      });
+
+      // sliders init
+      initChoiceSlider('typeSlider', ['single','album'],
+        () => (document.getElementById('fTypeHidden')?.value || 'single'),
+        (v) => { const h = document.getElementById('fTypeHidden'); if (h) h.value = v; },
+        (v) => { renderTracksSection(v); }
+      );
+
+      initChoiceSlider('genreSlider', ['альтернатива','хип-хоп','электроника'],
+        () => (document.getElementById('fGenre')?.value || 'альтернатива'),
+        (v) => { const g = document.getElementById('fGenre'); if (g) g.value = v; },
+        () => {}
+      );
+
+      initChoiceSlider('explicitSlider', ['no','yes'],
+        () => (document.getElementById('fExplicit')?.value || 'no'),
+        (v) => { const e = document.getElementById('fExplicit'); if (e) e.value = v; },
+        () => {}
+      );
+
+      
+
+      
+
+      // preview + reset
+      document.getElementById('openPreview')?.addEventListener('click', async () => {
+        const release = await collectRelease('draft');
+        if (!release) return;
+        openPreview(release);
+      });
+
+      document.getElementById('resetForm')?.addEventListener('click', () => {
+        location.hash = '#new';
+        renderNew();
+        setStatus('actionStatus', 'сброшено.', 'warn');
+      });
+    }
+
+    // ===== collect + validate =====
+    async function collectRelease(status) {
+      const title = document.getElementById('fTitle')?.value.trim() || '';
+      const type = document.getElementById('fTypeHidden')?.value || 'single';
+      const mainArtist = document.getElementById('fMain')?.value.trim() || '';
+      const featArtists = document.getElementById('fFeats')?.value.trim() || '';
+      const featDot = !!document.getElementById('fFeatDot')?.checked;
+      const releaseDate = document.getElementById('fDate')?.value || '';
+      const genre = document.getElementById('fGenre')?.value || '';
+      const explicit = (document.getElementById('fExplicit')?.value || 'no') === 'yes';
+      const additionalInfo = document.getElementById('fInfo')?.value || '';
+
+      const realNames = (formState.realNames || []).map(s => (s || '').trim()).filter(Boolean);
+
+      // строгая проверка только для отправки
+      if (status === 'review') {
+        const errors = [];
+        if (!formState.coverDataUrl) errors.push('обложка');
+        if (!title) errors.push('название релиза');
+        if (!mainArtist) errors.push('ник исполнителя');
+        if (!releaseDate) errors.push('дата');
+        if (!genre) errors.push('жанр');
+        if (realNames.length === 0) errors.push('ФИ');
+        if (type === 'single') {
+          const t = formState.tracks[0];
+          if (!t || !t.fileName) errors.push('файл трека');
+        } else {
+          if (!formState.tracks || formState.tracks.length < 2) errors.push('минимум 2 трека');
+        }
+        if (errors.length) {
+          setStatus('mainStatus', 'не заполнено: ' + errors.join(', '), 'bad');
+          return null;
+        }
+     //   setStatus('mainStatus', 'всё ок.', 'good');
+      } else {
+       // setStatus('mainStatus', 'можно делать предпросмотр.', 'warn');
+      }
+
+      // нормализуем треки для предпросмотра
+      let tracks = [];
+      if (type === 'single') {
+        const t = formState.tracks[0] || {};
+        tracks = [{
+          id: t.id || uid(),
+          title: title || '—',
+          fileName: t.fileName || '',
+          explicit: (t.explicit || 'no') === 'yes',
+          lyrics: '' ,
+          mainArtist: t.mainArtist || mainArtist,
+          featArtists: t.featArtists || '',
+          featDot: !!t.featDot,
+          genre: t.genre || genre
+        }];
+      } else {
+        tracks = (formState.tracks || []).map(t => ({
+          id: t.id || uid(),
+          title: t.title || '—',
+          fileName: t.fileName || '',
+          explicit: (t.explicit || 'no') === 'yes',
+          lyrics: '',
+          mainArtist,
+          featArtists,
+          featDot,
+          genre: t.genre || genre
+        }));
+      }
+
+      return {
+        id: formState.id || uid(),
+        owner: myLogin(),
+        status: status === 'review' ? 'review' : 'draft',
+        title,
+        type,
+        mainArtist,
+        featArtists,
+        featDot,
+        genres: genre,
+        releaseDate,
+        explicit,
+        realNames,
+        additionalInfo,
+        coverDataUrl: formState.coverDataUrl || null,
+        tracks,
+        createdAt: formState.id ? (prefillCreatedAt(formState.id) || nowISO()) : nowISO(),
+        updatedAt: nowISO()
+      };
+    }
+
+    // ===== preview modal =====
+    const modal = $('previewModal');
+    $('closePreview').onclick = () => modal.classList.remove('active');
+
+    $('pvSaveDraft').onclick = () => {
+      $('pvStatus').innerHTML = `<span class="pill warn">черновики временно отключены</span>`;
+    };
+
+    $('pvSubmit').onclick = () => {
+      const obj = window.__previewObj;
+      obj.status = 'review';
+      saveRelease(obj);
+
+      // если было в черновиках — удалим
+      deleteDraft(obj.id);
+
+      $('pvStatus').innerHTML = `<span class="pill good">отправлено на проверку</span>`;
+      setTimeout(() => {
+        modal.classList.remove('active');
+        location.hash = '#dashboard';
+        renderDashboard();
+      }, 650);
+    };
+
+    function openPreview(obj) {
+      window.__previewObj = obj;
+
+      $('pvCover').src = obj.coverDataUrl;
+      $('pvTitle').textContent = obj.title;
+      $('pvType').textContent = obj.type;
+      $('pvMain').textContent = obj.mainArtist;
+      $('pvFeats').textContent = obj.featArtists?.trim() ? obj.featArtists : '—';
+      $('pvGenres').textContent = obj.genres;
+      $('pvDate').textContent = obj.releaseDate;
+      $('pvExplicit').textContent = obj.explicit ? 'да' : 'нет';
+      $('pvReal').textContent = obj.realName;
+      $('pvInfo').textContent = obj.additionalInfo?.trim() ? obj.additionalInfo : '—';
+
+      $('pvTracks').innerHTML = `
+        <div class="card-title" style="margin-bottom: 2px">треки (${obj.tracks.length})</div>
+        ${obj.tracks.map((t, idx) => `
+          <div class="track">
+            <div>
+              <div class="n">${idx + 1}. ${escapeHTML(t.title)}</div>
+              <div class="m">${escapeHTML(t.fileName)}${t.explicit ? ' · explicit' : ''}${t.lyrics?.trim() ? ' · есть текст' : ''}</div>
+            </div>
+        `).join('')}
+      `;
+
+      $('pvStatus').innerHTML = '';
+      modal.classList.add('active');
+    }
+
+    // read-only view for sent releases
+    window.openReadOnly = (id) => {
+      const r = loadJSON(LS.releases, []).find(x => x.id === id);
+      if (!r) return;
+      openPreview(r);
+      // в этом режиме можно всё равно сохранить в черновик, но это ок для прототипа
+    };
+
+    // edit draft
+    window.editDraft = (id) => {
+      const d = loadJSON(LS.drafts, []).find(x => x.id === id);
+      if (!d) return;
+      __pendingPrefill = d;
+      location.hash = '#new';
+      routeTo('#new');
+      setStatus('actionStatus', 'открыт черновик.', 'warn');
+    };
+
+    window.removeDraft = (id) => {
+      deleteDraft(id);
+      renderDrafts();
+    };
+
+    // ===== misc =====
+    function setStatus(elId, text, kind) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      if (kind === 'good') el.innerHTML = `<span class="pill good">${escapeHTML(text)}</span>`;
+      else if (kind === 'bad') el.innerHTML = `<span class="pill bad">${escapeHTML(text)}</span>`;
+      else el.innerHTML = `<span class="pill warn">${escapeHTML(text)}</span>`;
+    }
+
+    function escapeHTML(s) {
+      return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+    }
+
+    function formatDT(iso) {
+      try {
+        const d = new Date(iso);
+        const dd = d.toLocaleDateString('ru-RU', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const tt = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        return `${dd} ${tt}`;
+      } catch {
+        return iso;
+      }
+    }
+
+    function readImage(file) {
+      return new Promise((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => {
+          const img = new Image();
+          img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight, dataUrl: fr.result });
+          img.onerror = reject;
+          img.src = fr.result;
+        };
+        fr.onerror = reject;
+        fr.readAsDataURL(file);
+      });
+    }
+
+    // ===== theme =====
+    const THEME_KEY = 'desolate.theme';
+    const themeBtn = document.getElementById('themeToggle');
+
+    function applyTheme(t) {
+      document.body.classList.toggle('light', t === 'light');
+      if (themeBtn) themeBtn.textContent = t === 'light' ? '◑' : '◐';
+    }
+
+    function loadTheme() {
+      const t = localStorage.getItem(THEME_KEY) || 'dark';
+      applyTheme(t);
+    }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.contains('light');
+      const next = isLight ? 'dark' : 'light';
+      localStorage.setItem(THEME_KEY, next);
+      applyTheme(next);
+    }
+
+    if (themeBtn) themeBtn.onclick = toggleTheme;
+
+    // ===== boot =====
+    function boot() {
+      const s = getSession();
+      if (!s) {
+        showLogin();
+        return;
+      }
+      $('whoName').textContent = myName();
+      showApp();
+      routeTo(location.hash || '#dashboard');
+    }
+
+    // start
+    boot();
+  </script>
+</body>
+</html>
